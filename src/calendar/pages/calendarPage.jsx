@@ -18,7 +18,7 @@ export const CalendarPage = () => {
     const { setActiveEvent } = UseCalendarStore();
     const eventStyleGetter = (event, start, end, isSelected) => {
 
-        const isMyEvent = (user.uid === event.user._id || user.uid === event.user.uid)
+        const isMyEvent = (user.uid === event.user?._id || user.uid === event.user?.uid)
         const style = {
             backgroundColor: isMyEvent ? '#347CF7' : '#465660',
             borderRadius: '0px',

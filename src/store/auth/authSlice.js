@@ -22,7 +22,11 @@ export const authSlice = createSlice({
 
             state.status = 'not-authenticated';
             state.user = {};
-            state.errorMessage = payload
+            if (payload?.includes("auth/account-exists-with-different-credential")) {
+                state.errorMessage = 'Un usuario existe con ese correo'
+            } else {
+                state.errorMessage = payload
+            }
         },
         clearErrorMessage: (state) => {
             state.errorMessage = undefined;

@@ -23,7 +23,9 @@ export const LoginPage = () => {
 
     const { emailRegister, passwordRegister, passwordRegisterRepeat, onInputChange: onRegisterInputChange, name, formState: formStateRegister } = useForm(initialFormRegister, {});
 
-    const { startLogin, errorMessage, startSignUp } = UseAuthStore();
+    const { startLogin, errorMessage, startSignUp, startLogInWithGoogle, startLogInWithFacebook, startLogInWithGithub } = UseAuthStore();
+
+
     const submitLogin = (event) => {
         event.preventDefault();
         startLogin({ email, password });
@@ -55,7 +57,15 @@ export const LoginPage = () => {
             startSignUp({ name, email: emailRegister, password: passwordRegister })
         }
     }
-
+    const LogInWithGoogle = () => {
+        startLogInWithGoogle();
+    }
+    const LogInWithFacebook = () => {
+        startLogInWithFacebook();
+    }
+    const logInWithGithub = () => {
+        startLogInWithGithub();
+    }
 
     return (
         <div className="containerLogin">
@@ -71,9 +81,9 @@ export const LoginPage = () => {
                             <button type="submit" id="login">Iniciar sesión</button>
                         </div>
                         <div className="icon-form">
-                            <IconButton><Google /></IconButton>
-                            <IconButton><GitHub /></IconButton>
-                            <IconButton><Facebook /></IconButton>
+                            <IconButton onClick={LogInWithGoogle}><Google /></IconButton>
+                            <IconButton onClick={logInWithGithub}><GitHub /></IconButton>
+                            <IconButton onClick={LogInWithFacebook}><Facebook /></IconButton>
                         </div>
                     </form>
                 </div>
@@ -89,14 +99,14 @@ export const LoginPage = () => {
                             <input type="text" value={name} name='name' onChange={onRegisterInputChange} placeholder="Nombre de usuario" />
                             <input type="text" value={emailRegister} name='emailRegister' onChange={onRegisterInputChange} placeholder="Email" />
                             <input type="password" value={passwordRegister} name='passwordRegister' onChange={onRegisterInputChange} placeholder="Contraseña" />
-                            <input type="password" value={passwordRegisterRepeat} name='passwordRegisterRepeat' onChange={onRegisterInputChange} placeholder="Repita lacontraseña" />
+                            <input type="password" value={passwordRegisterRepeat} name='passwordRegisterRepeat' onChange={onRegisterInputChange} placeholder="Repita la contraseña" />
                             <div className="button-form">
                                 <button type="submit" id='registrar'>Crear cuenta</button>
                             </div>
                             <div className="icon-form">
-                                <IconButton><Google /></IconButton>
-                                <IconButton><GitHub /></IconButton>
-                                <IconButton><Facebook /></IconButton>
+                                <IconButton onClick={LogInWithGoogle}><Google /></IconButton>
+                                <IconButton onClick={logInWithGithub}><GitHub /></IconButton>
+                                <IconButton onClick={LogInWithFacebook}><Facebook /></IconButton>
                             </div>
                         </div>
                     </form>

@@ -2,6 +2,7 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { CalendarApi } from '../api/calendarApi';
 import { checking, clearErrorMessage, logIn, logOut } from '../store/auth/authSlice';
+import { signInWithFacebook, signInWithGithub, signInWithGoogle } from '../firebase/providers';
 
 export const UseAuthStore = () => {
     const { status, user, errorMessage } = useSelector(state => state.auth)
@@ -61,10 +62,60 @@ export const UseAuthStore = () => {
             dispatch(logOut(error.response.data?.msg || error.response.data.errors || ''))
         }
     }
+
+    const startLogInWithGoogle = async () => {
+        dispatch(checking());
+        const result = await signInWithGoogle();
+        if (result.ok) {
+            const { data } = await CalendarApi.post('/auth/google', { uidProvider: result.uid, email: result.email, name: result.displayName });
+            localStorage.setItem('token', data.token);
+            localStorage.setItem('token-init-date', new Date().getTime());
+            dispatch(logIn({ name: data.name, token: data.token, uid: data.uid }))
+        } else {
+            dispatch(logOut(result.errorMessage));
+        }
+
+
+    }
+
+    const startLogInWithFacebook = async () => {
+        dispatch(checking());
+        const result = await signInWithFacebook();
+        if (result.ok) {
+            const { data } = await CalendarApi.post('/auth/google', { googleId: result.uid, email: result.email, name: result.displayName });
+            localStorage.setItem('token', data.token);
+            localStorage.setItem('token-init-date', new Date().getTime());
+            dispatch(logIn({ name: data.name, token: data.token, uid: data.uid }))
+        } else {
+            dispatch(logOut(result.errorMessage));
+        }
+
+
+    }
+
+
+    const startLogInWithGithub = async () => {
+        dispatch(checking());
+        const result = await signInWithGithub();
+        console.log(result)
+        if (result.ok) {
+            const { data } = await CalendarApi.post('/auth/google', { googleId: result.uid, email: result.email, name: result.displayName });
+            localStorage.setItem('token', data.token);
+            localStorage.setItem('token-init-date', new Date().getTime());
+            dispatch(logIn({ name: data.name, token: data.token, uid: data.uid }))
+        } else {
+            dispatch(logOut(result.errorMessage));
+        }
+
+
+    }
+
     const startlogOut = () => {
         localStorage.clear();
         dispatch(logOut())
     }
+
+
 
     return {
         status,
@@ -73,6 +124,9 @@ export const UseAuthStore = () => {
         startLogin,
         startSignUp,
         checkAuthToken,
-        startlogOut
+        startlogOut,
+        startLogInWithGoogle,
+        startLogInWithFacebook,
+        startLogInWithGithub
     }
 }
