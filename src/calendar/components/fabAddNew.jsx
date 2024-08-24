@@ -22,6 +22,7 @@ export const FabAddNew = () => {
     }
     return (
         <button className='btn btn-primary fab'
+            aria-label='fabNew'
             onClick={handleClickNew}>
 
             <i className='fas fa-plus'></i>

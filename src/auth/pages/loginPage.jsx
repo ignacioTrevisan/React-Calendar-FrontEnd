@@ -1,11 +1,25 @@
 import React, { useEffect } from 'react'
 import './loginPage.css'
-import { IconButton } from '@mui/material'
-import { Facebook, GitHub, Google } from '@mui/icons-material'
 import { useForm } from '../../hooks/useForm'
 import { UseAuthStore } from '../../hooks/useAuthStore'
 import Swal from 'sweetalert2'
 
+
+let Facebook, GitHub, Google, IconButton;
+
+const loadIcons = async () => {
+    if (process.env.NODE_ENV !== 'test') {
+        const iconsModule = await import('@mui/icons-material');
+        const muiModule = await import('@mui/material');
+
+        Facebook = iconsModule.Facebook;
+        GitHub = iconsModule.GitHub;
+        Google = iconsModule.Google;
+        IconButton = muiModule.IconButton;
+    }
+};
+
+loadIcons();
 
 const initialFormLogin = {
     email: '',
@@ -81,9 +95,13 @@ export const LoginPage = () => {
                             <button type="submit" id="login">Iniciar sesión</button>
                         </div>
                         <div className="icon-form">
-                            <IconButton onClick={LogInWithGoogle}><Google /></IconButton>
-                            <IconButton onClick={logInWithGithub}><GitHub /></IconButton>
-                            <IconButton onClick={LogInWithFacebook}><Facebook /></IconButton>
+                            {process.env.NODE_ENV !== 'test' && (
+                                <>
+                                    <IconButton onClick={LogInWithGoogle}><Google /></IconButton>
+                                    <IconButton onClick={logInWithGithub}><GitHub /></IconButton>
+                                    <IconButton onClick={LogInWithFacebook}><Facebook /></IconButton>
+                                </>
+                            )}
                         </div>
                     </form>
                 </div>
@@ -104,10 +122,14 @@ export const LoginPage = () => {
                                 <button type="submit" id='registrar'>Crear cuenta</button>
                             </div>
                             <div className="icon-form">
-                                <IconButton onClick={LogInWithGoogle}><Google /></IconButton>
-                                <IconButton onClick={logInWithGithub}><GitHub /></IconButton>
-                                <IconButton onClick={LogInWithFacebook}><Facebook /></IconButton>
-                            </div>
+
+                                {process.env.NODE_ENV !== 'test' && (
+                                    <>
+                                        <IconButton onClick={LogInWithGoogle}><Google /></IconButton>
+                                        <IconButton onClick={logInWithGithub}><GitHub /></IconButton>
+                                        <IconButton onClick={LogInWithFacebook}><Facebook /></IconButton>
+                                    </>
+                                )} </div>
                         </div>
                     </form>
                 </div>

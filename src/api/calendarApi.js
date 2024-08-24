@@ -4,6 +4,7 @@ import { GetEnvVariables } from '../helpers/getEnvVariables';
 
 const { VITE_API_URL } = GetEnvVariables();
 
+
 export const CalendarApi = axios.create({
     baseURL: VITE_API_URL
 });

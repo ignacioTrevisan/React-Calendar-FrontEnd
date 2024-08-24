@@ -1,14 +1,20 @@
-import Modal from 'react-modal'
-import React, { useEffect, useMemo, useState } from 'react'
-import './modal.css'
-import { addHours, differenceInSeconds } from 'date-fns'
+import Modal from 'react-modal';
+import React, { useEffect, useMemo, useState } from 'react';
+import { addHours, differenceInSeconds } from 'date-fns';
 import DatePicker, { registerLocale } from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
 import es from 'date-fns/locale/es';
-import Swal from 'sweetalert2'
+import Swal from 'sweetalert2';
 import { UseUiStore } from '../../hooks/useUiStore';
 import { UseCalendarStore } from '../../hooks';
+import zIndex from '@mui/material/styles/zIndex';
+import { isValid } from 'date-fns/isValid';
 
+if (process.env.NODE_ENV !== 'test') {
+    //por alguna razon en testing al importar .css me tira error de sintaxis
+    //asi que esta es una solucion parcial
+    import('./modal.css');
+    import('react-datepicker/dist/react-datepicker.css');
+}
 
 registerLocale('es', es)
 
@@ -16,21 +22,20 @@ registerLocale('es', es)
 export const CalendarModal = () => {
 
     const { isDateModalOpen, closeDateModal } = UseUiStore();
-    const { startSavingEvent, startLoadingEvents } = UseCalendarStore();
+    const { startSavingEvent, startLoadingEvents, activeEvent } = UseCalendarStore();
     const [formSubmitted, setFormSubmitted] = useState(false);
 
 
-    const { activeEvent } = UseCalendarStore();
+
     useEffect(() => {
         startLoadingEvents();
     }, [])
 
 
     useEffect(() => {
-        if (activeEvent) {
+        if (activeEvent && isValid(activeEvent.start) && isValid(activeEvent.end)) {
             setFormValue(activeEvent);
         } else {
-            // Si activeEvent es null o undefined, establece un valor por defecto
             setFormValue({
                 title: '',
                 notes: '',
@@ -84,6 +89,7 @@ export const CalendarModal = () => {
             left: '50%',
             right: 'auto',
             bottom: 'auto',
+
             marginRight: '-50%',
             transform: 'translate(-50%, -50%)',
         },
@@ -92,10 +98,6 @@ export const CalendarModal = () => {
 
         closeDateModal();
     }
-    const modalIsOpen = () => {
-        console.log('abriendo modal')
-    }
-
 
     const submit = (event) => {
         setFormSubmitted(true);
@@ -128,15 +130,13 @@ export const CalendarModal = () => {
     }, [formValue?.title, formSubmitted])
 
 
+    if (process.env.NODE_ENV !== 'test') Modal.setAppElement('#root');
 
-    Modal.setAppElement('#root');
     return (
         <Modal
             isOpen={isDateModalOpen}
             onRequestClose={onCloseModal}
             style={customStyles}
-
-            className={'modal'}
             overlayClassName={'modal-fondo'}
             closeTimeoutMS={500}
         >
