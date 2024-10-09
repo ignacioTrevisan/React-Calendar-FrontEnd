@@ -4,6 +4,18 @@ import { useForm } from '../../hooks/useForm';
 import { UseAuthStore } from '../../hooks/useAuthStore';
 import Swal from 'sweetalert2';
 
+const initialFormLogin = {
+    email: '',
+    password: ''
+};
+
+const initialFormRegister = {
+    emailRegister: '',
+    name: '',
+    passwordRegister: '',
+    passwordRegisterRepeat: ''
+};
+
 export const LoginPage = () => {
     const [icons, setIcons] = useState({
         Facebook: null,
@@ -30,17 +42,7 @@ export const LoginPage = () => {
         loadIcons();
     }, []);
 
-    const initialFormLogin = {
-        email: '',
-        password: ''
-    };
 
-    const initialFormRegister = {
-        emailRegister: '',
-        name: '',
-        passwordRegister: '',
-        passwordRegisterRepeat: ''
-    };
 
     const { email, password, onInputChange: onLoginInputChange } = useForm(initialFormLogin, {});
     const { emailRegister, passwordRegister, passwordRegisterRepeat, onInputChange: onRegisterInputChange, name } = useForm(initialFormRegister, {});
